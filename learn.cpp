@@ -225,4 +225,59 @@ extern "C"{
 ///Function chaining: sequence of functions which has to be executed in order else we get error.
 ///It works correctly while passing by reference.
 
-///function Hiding: 
+///function Hiding: Base and Derived function have the functions whose names are similar irrespective of number of arguments or type of argument.
+///if we try to call function of base from derived class object, the base function will be hiding and only derived function will be called.
+///To explicitly call base function we need to bring base function codes to derived class. To do that we shld define "using Base::fun;" within derived class.
+///So that all functions in base will come derived class scope.
+#include <iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+class Base{
+public:
+   void fun(int i){
+       cout<<"BASE"<<endl;
+   }
+    
+};
+
+class Derived: public Base{
+public:
+    //using Base::fun;  this line shld be present to overcome function hiding.
+    void fun(char c){
+        cout<< "Derived" <<endl;
+    }
+};
+
+int main() {
+    Derived d;
+    d.fun(1);
+    d.fun('a');
+}
+
+//Functor usage in c++
+#include <iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+class Mul{
+    int val;
+public:
+  Mul(){}
+  Mul(int v):val(v){}
+  
+  int operator () (int var){
+      return var*val;
+  }
+    
+};
+
+int main() {
+    Mul mul(12);
+    cout<<mul(2)<<endl;//operator overloading happens 
+    cout<<mul(3)<<endl;
+}
+
+
