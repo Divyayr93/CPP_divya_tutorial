@@ -280,4 +280,126 @@ int main() {
     cout<<mul(3)<<endl;
 }
 
+///delete[] how system know how many elements to delete?///
+/// when array is constructed it's size is stored somewhere and when it's called we get it from that place and deallocate the memory.///
+///2 ways to store the size: 1. OverAllocation  2. Associative Array
+///OverAllocation: More space is assigned that what is needed.
+
+Example:
+#include<iostream>
+using namespace std;
+
+int main()
+{
+    int ae = 3; //actual elements
+    int *p = new int[10];
+    for(i=0;i<ae;i++)
+        p[i] = (i+1)*10;  //p is populated with data.
+    delete[] p; // p array is deleted completely.
+    return 0;
+
+}
+
+///Associative Array: maps key to a value. std::unordered_map and std::map.
+
+#include<iostream>
+#include<unordered_map>
+#include<string>
+int main()
+{
+    std::unordered_map<std::string, double> i;
+    i["apple"] = 2.0;
+    i["ban"] = 1.5;
+    i["oran"] = 3.0;
+
+    i.erase("apple");
+    //or in c++20 we use erase_if() function to delete
+    std::erase_if(i, [](const auto& item) { return item.second>1.5} )
+}
+
+///Address passed as hidden argument, but it is not the case in Static member function.
+/// If a member function is const then, "this" pointers type becomes [const TYPE* const this]
+#include <iostream>
+using namespace std;
+
+class Base
+{
+    private:
+    int a;
+    public:
+    void setValue(int b){
+        a=b;
+    }///this inturn is interpreted as void setValue(Base* const this,int b){this->a = b;}
+    
+    int getValue() const{
+        return a;
+    } //internally it is called as int getValue(const Base* const this) const{return a;} 
+};
+int main() {
+   Base b;
+   b.setValue(10); // internally code is called as setValue(&b);
+   cout<<b.getValue()<<endl;///Internally it is called as getValue(&b);
+ 
+    return 0;
+}
+
+///How to assign class object if it is not of premitive datatype.
+///operator int(){} to be overloaded to perform this operation.
+
+#include <iostream>
+using namespace std;
+
+class Base
+{
+    private:
+    int a;
+    public:
+    Base(){}
+    Base(int b):a{b} {}
+    /*operator int() const{
+        return a;
+    }*/ /// Without this we get an error: cannot convert 'Base' to 'int' in initialization, so operator int() has to be overloaded.
+};
+int main() {
+    Base b(10);
+    int temp = b;
+    cout<<temp<<endl;
+    return 0;
+}
+
+///How to call any function before main function.
+///create a global class object and call the function. OR
+///create a static variable and assign with function call.
+
+#include <iostream>
+using namespace std;
+int func(){
+    cout<<"Inside Func"<<endl;
+    return 10;
+}
+class Base
+{
+    private:
+    static int a;
+    public:
+    Base(){}
+    Base(int b){func();}
+};
+
+Base b(10);  // 1st method
+int Base::a= func(); // 2nd method
+int main() {
+
+    cout<<"Inside Main"<<endl;
+    return 0;
+}
+
+/// How to check if both objects are from same class or not.
+/// typeid(object) is used to compare the class of any objects.
+///#include<typeinfo> to be added for this operation.
+
+
+///
+
+
 
